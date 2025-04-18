@@ -16,7 +16,7 @@ public class ProductoController {
     @Autowired
     private ProductoService productoService;
 
-    @GetMapping("/buscar")
+    @GetMapping("/buscar-producto")
     public List<ProductoDTO> buscarProductos(
             @RequestParam(required = false) String numeroSerie,
             @RequestParam(required = false) String nombre,

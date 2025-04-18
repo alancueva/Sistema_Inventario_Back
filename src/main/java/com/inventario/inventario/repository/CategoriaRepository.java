@@ -7,13 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Repository
 public interface CategoriaRepository extends JpaRepository<CategoriaDTO, Integer> {
-    //extends JpaRepository<Categoria, Integer>
+
     @Query(value = "CALL sp_categoria_mostrar_nombres_descripcion()", nativeQuery = true)
     List<ConsultaCategoria> MostrarNombreCategia();
 
@@ -23,17 +22,11 @@ public interface CategoriaRepository extends JpaRepository<CategoriaDTO, Integer
     );
 
     @Query(value = "CALL sp_categoria_recuperar_categoria(:id)", nativeQuery = true)
-//    @Procedure(name ="sp_categoria_recuperar_categoria")
     CategoriaDTO RecuperaCategoria(@Param("id") int id );
 
-    @Transactional
     @Procedure(name = "sp_categoria_insertar_categoria")
     void InsertarCategoria(String nombreCategoria, String vigencia, String descripcion, String usuarioCreacion);
 
-//    @Param("p_Nombre") String nombre,
-//    @Param("p_Estado") String estado
-
-    @Transactional
     @Procedure(name = "sp_categoria_modificar_categoria")
     void actualizarCategoria(int idCategoria, String nombreCategoria, String vigencia,String descripcion, String usuarioModificacion);
 }
