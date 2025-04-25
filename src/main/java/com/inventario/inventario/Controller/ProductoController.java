@@ -1,11 +1,7 @@
 package com.inventario.inventario.Controller;
 
 
-import com.inventario.inventario.model.Producto.StockMovimientoRequest;
-import com.inventario.inventory.exception.StockOperationException;
-import com.inventario.inventario.model.Producto.ProductoDTO;
-import com.inventario.inventario.model.Producto.ProductoI;
-import com.inventario.inventario.model.Producto.ProductoU;
+import com.inventario.inventario.model.Producto.*;
 import com.inventario.inventario.service.ProductoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,37 +17,41 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/productos")
 public class ProductoController {
+
     @Autowired
     private ProductoService productoService;
 
-    @GetMapping("/buscar-producto")
     @Operation (summary = "Buscar productos por filtros",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Lista de productos obtenida exitosamente"),
+                    @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos"),
                     @ApiResponse(responseCode = "500", description = "Error interno del servidor")
             }
     )
-    public List<ProductoDTO> buscarProductos(
-            @RequestParam(required = false) String numeroSerie,
-            @RequestParam(required = false) String nombre,
-            @RequestParam(required = false) String descripcion,
-            @RequestParam(required = false) String estado
-    ){
-        return productoService.buscarProductos(numeroSerie,nombre,descripcion,estado);
+    @PostMapping("/buscar-producto")
+    public ResponseEntity<List<ProductoDTO>> buscarProductos(@RequestBody ProductoB productoB){
+        List<ProductoDTO> productolstList = productoService.buscarProductos(
+                productoB.getNumeroSerie(),
+                productoB.getNombre(),
+                productoB.getDescripcion(),
+                productoB.getEstado());
+
+        return ResponseEntity.ok(productolstList);
     }
 
-    @GetMapping("/seleccionar")
+
     @Operation(summary = "Obtener todos los productos",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Lista de productos obtenida exitosamente"),
                     @ApiResponse(responseCode = "500", description = "Error interno del servidor")
             }
     )
+    @GetMapping("/seleccionar")
     public List<ProductoDTO> seleccionarProductos() {
         return productoService.obtenerProductos();
     }
 
-    @GetMapping("/recuperar_producto/{id_producto}")
+
     @Operation (summary = "Recuperar producto por ID",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Producto recuperado exitosamente"),
@@ -59,22 +59,23 @@ public class ProductoController {
                     @ApiResponse(responseCode = "400", description = "Parámetro inválido")
             }
     )
+    @GetMapping("/recuperar_producto/{id_producto}")
     public ResponseEntity<ProductoDTO> RecuperarProducto(@PathVariable int id_producto){
         ProductoDTO pdto = productoService.RecuperarProducto(id_producto);
         return ResponseEntity.ok(pdto);
     }
 
-    @PostMapping("/movimiento_stock")
     @Operation (summary = "Actualizar Stock de producto",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Producto insertado exitosamente"),
                     @ApiResponse(responseCode = "400", description = "Error al procesar la operación")
             }
     )
+    @PostMapping("/movimiento_stock")
     public ResponseEntity<?> actualizarStock(@RequestBody StockMovimientoRequest request) {
         try {
             productoService.procesarMovimientoStock(request);
-            return ResponseEntity.ok();
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("error", e.getMessage());

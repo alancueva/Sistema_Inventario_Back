@@ -17,8 +17,8 @@ public class ProductoService {
     @Autowired
     private ProductoRepository productoRepository;
 
-
     public List<ProductoDTO> buscarProductos(String numeroSerie, String nombre, String descripcion, String estado) {
+
         return productoRepository.buscarProducto(numeroSerie, nombre, descripcion, estado);
     }
 
