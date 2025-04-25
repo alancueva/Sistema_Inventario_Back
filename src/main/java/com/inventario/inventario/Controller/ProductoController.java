@@ -30,13 +30,18 @@ public class ProductoController {
     )
     @PostMapping("/buscar-producto")
     public ResponseEntity<List<ProductoDTO>> buscarProductos(@RequestBody ProductoB productoB){
-        List<ProductoDTO> productolstList = productoService.buscarProductos(
-                productoB.getNumeroSerie(),
-                productoB.getNombre(),
-                productoB.getDescripcion(),
-                productoB.getEstado());
+        try {
+            List<ProductoDTO> productolstList = productoService.buscarProductos(
+                    productoB.getNumeroSerie(),
+                    productoB.getNombre(),
+                    productoB.getDescripcion(),
+                    productoB.getEstado());
 
-        return ResponseEntity.ok(productolstList);
+            return ResponseEntity.ok(productolstList);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
     }
 
 
@@ -86,7 +91,7 @@ public class ProductoController {
     @PostMapping("/insertar_producto")
     @Operation (summary = "Insertar producto",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "Producto insertado exitosamente"),
+                    @ApiResponse(responseCode = "201", description = "Producto insertado exitosamente"),
                     @ApiResponse(responseCode = "500", description = "Error interno del servidor")
             }
     )

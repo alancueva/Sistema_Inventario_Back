@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.ErrorResponseException;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -18,12 +17,19 @@ public class ProductoService {
     private ProductoRepository productoRepository;
 
     public List<ProductoDTO> buscarProductos(String numeroSerie, String nombre, String descripcion, String estado) {
-
-        return productoRepository.buscarProducto(numeroSerie, nombre, descripcion, estado);
+        try {
+            return productoRepository.buscarProducto(numeroSerie, nombre, descripcion, estado);
+        } catch (Exception e) {
+            throw new RuntimeException("Error al buscar productos", e);
+        }
     }
 
     public List<ProductoDTO> obtenerProductos() {
-        return productoRepository.seleccionarProductos();
+        try {
+            return productoRepository.seleccionarProductos();
+        } catch (Exception e) {
+            throw new RuntimeException("Error al obtener productos", e);
+        }
     }
 
     @Transactional
