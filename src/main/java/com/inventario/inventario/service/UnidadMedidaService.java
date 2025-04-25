@@ -7,6 +7,7 @@ import com.inventario.inventario.repository.UnidadMedidaRepository;
 import com.inventario.inventario.repository.Unidad_medidaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,18 +22,13 @@ public class UnidadMedidaService {
         this.unidadMedidaRepository = repository;
     }
 
+    // Buscar unidades de medida por descripción
     public List<UnidadMedidaDTO> buscarUnidadMedida(String um_descripcion) {
         try {
             return unidadMedidaRepository.buscarUnidadMedida(um_descripcion);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-
-    public UnidadMedidaDTO getUnidadMedidaById(Integer id) {
-        List<UnidadMedidaDTO> resultado = unidadMedidaRepository.RecuperarUnidadMedida(id);
-        return resultado.isEmpty() ? null : resultado.get(0);
     }
 
     // Buscar unidades de medida por descripción
@@ -48,6 +44,7 @@ public class UnidadMedidaService {
         }
     }
 
+    @Transactional
     public void saveUnidadMedida(UnidadMedidaDTO unidadMedida) {
         if (unidadMedida.getIdunidadmedida() == null) {
             unidadMedidaRepository.insertarUnidadMedida(
