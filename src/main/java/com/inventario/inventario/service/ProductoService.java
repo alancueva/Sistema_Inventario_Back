@@ -1,15 +1,14 @@
 package com.inventario.inventario.service;
 
-import com.inventario.inventario.model.Producto.ConsultaProducto;
-import com.inventario.inventario.model.Producto.ProductoDTO;
-import com.inventario.inventario.model.Producto.ProductoI;
-import com.inventario.inventario.model.Producto.ProductoU;
+import com.inventario.inventario.model.Producto.*;
 import com.inventario.inventario.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.ErrorResponseException;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -62,7 +61,7 @@ public class ProductoService {
     @Transactional
     public void procesarMovimientoStock(StockMovimientoRequest request) {
         try {
-            ProductoRepository.procesarMovimientoStock(
+            productoRepository.procesarMovimientoStock (
                     request.getProductoId(),
                     request.getTipoMovimiento(),
                     request.getCantidad(),
@@ -75,11 +74,9 @@ public class ProductoService {
                     request.getResponsableSalida()
             );
 
-        } catch (DataAccessException e) {
-            // Capturar errores de la base de datos
+        } catch (Exception ex) {
             String errorMessage = "Error al procesar la operación de stock";
 
-            // extraer el mensaje del error de MySQL
             if (ex.getCause() instanceof SQLException) {
                 SQLException sqlEx = (SQLException) ex.getCause();
                 if (sqlEx.getSQLState().equals("45000")) {
@@ -87,7 +84,7 @@ public class ProductoService {
                 }
             }
 
-            throw new StockOperationException(errorMessage);
+            throw new RuntimeException(errorMessage, ex);
         }
     }
 
