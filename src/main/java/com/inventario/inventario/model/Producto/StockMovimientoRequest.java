@@ -1,5 +1,6 @@
 package com.inventario.inventario.model.Producto;
 
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
