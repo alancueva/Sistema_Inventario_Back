@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 @Repository
-public interface UbigeoRepository extends JpaRepository<Ubigeo, Integer> {
+public interface UbigeoRepository extends JpaRepository<Ubigeo, String> {
 
     /**
      * Método para mostrara todos los ubigeos.
@@ -24,10 +24,10 @@ public interface UbigeoRepository extends JpaRepository<Ubigeo, Integer> {
     /**
      * Método para buscar un ubigeo por su nombre.
      *
-     * @param ubigeo_nombre Nombre del ubigeo a buscar.
+     * @param ubigeoNombre Nombre del ubigeo a buscar.
      * @return UbigeoDTO que contiene la información del ubigeo encontrado.
      */
     @Query(value = "CALL sp_ubigeo_busqueda(:ubigeo_nombre)", nativeQuery = true)
-    UbigeoDTO BusquedaUbigeo(@Param("ubigeo_nombre") String ubigeo_nombre);
+    UbigeoDTO BusquedaUbigeo(@Param("ubigeo_nombre") String ubigeoNombre);
 
 }

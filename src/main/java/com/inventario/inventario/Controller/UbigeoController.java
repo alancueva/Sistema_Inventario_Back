@@ -8,18 +8,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/ubigeo")
 public class UbigeoController {
+
     @Autowired
     private UbigeoService ubigeoService;
+
 
     /**
      * * Endpoint para obtener todos los ubigeos.
@@ -33,7 +32,8 @@ public class UbigeoController {
              }
      )
     public ResponseEntity<List<UbigeoDTO>> obtenerUbigeos() {
-        return ResponseEntity.ok(ubigeoService.obtenerUbigeos());
+        List<UbigeoDTO> ubigeos = ubigeoService.obtenerUbigeos();
+        return ResponseEntity.ok(ubigeos);
     }
 
     /**
@@ -49,9 +49,10 @@ public class UbigeoController {
              }
      )
      public ResponseEntity<UbigeoDTO> buscarUbigeo(
-             @Parameter(description = "Nombre del ubigeo a buscar", required = true)
-             @RequestParam String ubigeoNombre) {
-        return ResponseEntity.ok(ubigeoService.buscarUbigeo(ubigeoNombre));
+             //@Parameter(description = "Nombre del ubigeo a buscar", required = true)
+             @PathVariable String ubigeoNombre) {
+         UbigeoDTO ubigeo = ubigeoService.buscarUbigeo(ubigeoNombre);
+        return ResponseEntity.ok(ubigeo);
     }
 
 }
