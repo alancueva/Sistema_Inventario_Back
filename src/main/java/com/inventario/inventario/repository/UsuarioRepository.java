@@ -1,10 +1,13 @@
 package com.inventario.inventario.repository;
 
 import com.inventario.inventario.model.Usuario.UsuarioDTO;
+import com.inventario.inventario.model.Usuario.UsuarioLst;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,7 +27,7 @@ public interface UsuarioRepository extends JpaRepository<UsuarioDTO, Integer> {
 
 
     @Query(value = "CALL sp_usuario_recuperar_usuario(:u_id_usuario)", nativeQuery = true)
-    UsuarioDTO recuperarUsuario(@Param("u_id_usuario") int id_usuario);
+    UsuarioLst recuperarUsuario(@Param("u_id_usuario") int id_usuario);
 
     @Query(value = "CALL sp_usuario_insertar_usuario(" +
             ":u_role_id, " +
@@ -45,6 +48,8 @@ public interface UsuarioRepository extends JpaRepository<UsuarioDTO, Integer> {
             @Param("u_usuario_creacion") String usuarioCreacion
     );
 
+    @Modifying
+    @Transactional
     @Query(value = "CALL sp_usuario_modificar_usuario(" +
             ":u_id_usuario, :u_role_id, " +
             ":u_dni, :u_nombre, :u_apellido_paterno, " +

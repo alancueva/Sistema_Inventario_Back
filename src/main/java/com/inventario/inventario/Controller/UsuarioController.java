@@ -1,12 +1,9 @@
 package com.inventario.inventario.Controller;
 
-import com.inventario.inventario.model.Usuario.UsuarioC;
-import com.inventario.inventario.model.Usuario.UsuarioDTO;
-import com.inventario.inventario.model.Usuario.UsuarioI;
-import com.inventario.inventario.model.Usuario.UsuarioU;
+import com.inventario.inventario.model.Usuario.*;
 import com.inventario.inventario.service.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+//import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,12 +43,13 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("/recuperar-usuario")
-    public ResponseEntity<UsuarioDTO> recuperarUsuario(@PathVariable int id_usuario) {
+    @GetMapping("/recuperar-usuario/{id_usuario}")
+    public ResponseEntity<UsuarioLst> recuperarUsuario(@PathVariable int id_usuario) {
         try {
-            UsuarioDTO usuario = usuarioService.recuperarUsuario(id_usuario);
+            UsuarioLst usuario = usuarioService.recuperarUsuario(id_usuario);
             return ResponseEntity.ok(usuario);
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
@@ -59,7 +57,8 @@ public class UsuarioController {
     @PostMapping("/insetar-usuario")
     public ResponseEntity<Void> insertUsuario(@RequestBody UsuarioI usuarioI) {
         try {
-            usuarioService.insertUsuario(usuarioI.getRole_id(),
+            usuarioService.insertUsuario(
+                    usuarioI.getRole_id(),
                     usuarioI.getDni(),
                     usuarioI.getNombre(),
                     usuarioI.getApellido_paterno(),
@@ -71,6 +70,7 @@ public class UsuarioController {
                     usuarioI.getUsuario_creacion());
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }

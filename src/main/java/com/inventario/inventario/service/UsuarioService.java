@@ -2,7 +2,9 @@ package com.inventario.inventario.service;
 
 
 import com.inventario.inventario.model.Usuario.UsuarioDTO;
+import com.inventario.inventario.model.Usuario.UsuarioLst;
 import com.inventario.inventario.repository.UsuarioRepository;
+import com.inventario.inventario.utils.MDcinco;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +35,7 @@ public class UsuarioService {
         }
     }
 
-    public UsuarioDTO recuperarUsuario(int id_usuario) {
+    public UsuarioLst recuperarUsuario(int id_usuario) {
         try {
             return usuarioRepository.recuperarUsuario(id_usuario);
         } catch (Exception e) {
@@ -41,7 +43,7 @@ public class UsuarioService {
         }
     }
 
-    @Transactional
+    //@Transactional
     public void insertUsuario(
             int roleId,
             String dni,
@@ -55,7 +57,17 @@ public class UsuarioService {
             String usuarioCreacion
     ) {
         try {
-            usuarioRepository.insertUsuario(roleId, dni, nombre, apellidoPaterno, apellidoMaterno, telefono, correo, clave, vigencia, usuarioCreacion);
+            usuarioRepository.insertUsuario(
+                    roleId,
+                    dni,
+                    nombre,
+                    apellidoPaterno,
+                    apellidoMaterno,
+                    telefono,
+                    correo,
+                    MDcinco.encrypt(clave),
+                    vigencia,
+                    usuarioCreacion);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
