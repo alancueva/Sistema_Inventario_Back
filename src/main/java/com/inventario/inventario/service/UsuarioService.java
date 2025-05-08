@@ -3,6 +3,7 @@ package com.inventario.inventario.service;
 
 import com.inventario.inventario.model.Usuario.UsuarioDTO;
 import com.inventario.inventario.model.Usuario.UsuarioLst;
+import com.inventario.inventario.model.Usuario.UsuarioLstB;
 import com.inventario.inventario.repository.UsuarioRepository;
 import com.inventario.inventario.utils.MDcinco;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public List<UsuarioDTO> buscarUsuario(
+    public List<UsuarioLstB> buscarUsuario(
             String dni,
             String nombre,
             String apellidoPaterno,

@@ -2,6 +2,7 @@ package com.inventario.inventario.repository;
 
 import com.inventario.inventario.model.Usuario.UsuarioDTO;
 import com.inventario.inventario.model.Usuario.UsuarioLst;
+import com.inventario.inventario.model.Usuario.UsuarioLstB;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +18,7 @@ public interface UsuarioRepository extends JpaRepository<UsuarioDTO, Integer> {
     @Query(value = "CALL sp_usuario_buscar_usuario(:u_dni, " +
             ":u_nombre, :u_apellido_paterno, " +
             ":u_apellido_materno, :u_vigencia)", nativeQuery = true)
-    List<UsuarioDTO> buscarUsuario(
+    List<UsuarioLstB> buscarUsuario(
             @Param("u_dni") String dni,
             @Param("u_nombre") String nombre,
             @Param("u_apellido_paterno") String apellidoPaterno,
